@@ -21,6 +21,11 @@ const EMISSION_FACTORS = {
   coal: 820,
 };
 
+const getStatusClasses = (statusColor: string) => ({
+  borderClass: statusColor === 'success' ? 'border-success' : statusColor === 'warning' ? 'border-warning' : 'border-destructive',
+  cssColor: statusColor === 'success' ? 'hsl(var(--success))' : statusColor === 'warning' ? 'hsl(var(--warning))' : 'hsl(var(--destructive))',
+});
+
 const Emissions = () => {
   const [energyMix, setEnergyMix] = useState({
     solar: 30,
@@ -210,17 +215,13 @@ const Emissions = () => {
             </Card>
 
             {/* Emission Intensity */}
-            <Card className={`border-2 ${statusColor === 'success' ? 'border-success' : statusColor === 'warning' ? 'border-warning' : 'border-destructive'}`}>
+            <Card className={`border-2 ${getStatusClasses(statusColor).borderClass}`}>
               <CardHeader>
                 <CardTitle>Emission Intensity</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center">
-                  <div className="text-6xl font-bold mb-2" style={{
-                    color: statusColor === 'success' ? 'hsl(var(--success))' : 
-                           statusColor === 'warning' ? 'hsl(var(--warning))' : 
-                           'hsl(var(--destructive))'
-                  }}>
+                  <div className="text-6xl font-bold mb-2" style={{ color: getStatusClasses(statusColor).cssColor }}>
                     {emissionIntensity}
                   </div>
                   <div className="text-lg text-muted-foreground mb-4">gCO₂/kWh</div>

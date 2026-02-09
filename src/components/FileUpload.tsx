@@ -4,9 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
-interface FileUploadProps {
-  onFileUpload: (data: any) => void;
+interface FileUploadResult {
+  data: Record<string, string>[];
+  headers: string[];
+  results: ReturnType<typeof generateMockResults>;
+  fileName: string;
 }
+
+interface FileUploadProps {
+  onFileUpload: (data: FileUploadResult) => void;
+}
+
+const parseCSVHeaders = (text: string) => {
+  const lines = text.split('\n').filter(line => line.trim());
+  const headers = lines[0]?.split(',').map(h => h.trim()) ?? [];
+  return { lines, headers };
+};
 
 export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [file, setFile] = useState<File | null>(null);
@@ -25,10 +38,8 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   }, []);
 
   const validateCSV = (text: string): boolean => {
-    const lines = text.split('\n').filter(line => line.trim());
+    const { lines, headers } = parseCSVHeaders(text);
     if (lines.length < 2) return false;
-    
-    const headers = lines[0].split(',').map(h => h.trim());
     return headers.includes('Maintenance_Label');
   };
 
@@ -58,12 +69,11 @@ export const FileUpload = ({ onFileUpload }: FileUploadProps) => {
       }
 
       // Parse CSV
-      const lines = text.split('\n').filter(line => line.trim());
-      const headers = lines[0].split(',').map(h => h.trim());
-      
+      const { lines, headers } = parseCSVHeaders(text);
+
       const data = lines.slice(1).map(line => {
         const values = line.split(',');
-        const row: any = {};
+        const row: Record<string, string> = {};
         headers.forEach((header, index) => {
           row[header] = values[index]?.trim();
         });

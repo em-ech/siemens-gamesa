@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Clock, CheckCircle2, Send } from "lucide-react";
 
-interface Alert {
+export interface Alert {
   turbineId: string;
   probability: number;
   model: string;
@@ -28,7 +28,7 @@ export const AlertsList = ({ alerts }: AlertsListProps) => {
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-muted-foreground">
-            <CheckCircle className="h-16 w-16 mx-auto mb-4 text-success" />
+            <CheckCircle2 className="h-16 w-16 mx-auto mb-4 text-success" />
             <p>All turbines are operating within normal parameters</p>
           </div>
         </CardContent>
@@ -50,9 +50,9 @@ export const AlertsList = ({ alerts }: AlertsListProps) => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {alerts.map((alert, index) => (
+            {alerts.map((alert) => (
               <div
-                key={index}
+                key={alert.turbineId}
                 className="flex items-center justify-between p-4 rounded-lg border border-border bg-gradient-card hover:border-primary/50 transition-all duration-300"
               >
                 <div className="flex items-start gap-4">
@@ -108,9 +108,3 @@ export const AlertsList = ({ alerts }: AlertsListProps) => {
     </>
   );
 };
-
-const CheckCircle = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-);

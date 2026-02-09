@@ -59,11 +59,11 @@ const Home = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const Icon = feature.icon;
             return (
               <Card
-                key={index}
+                key={feature.title}
                 className="group cursor-pointer transition-all duration-300 hover:shadow-glow hover:scale-105 hover:-translate-y-1 border-border/50 backdrop-blur-sm bg-card/95"
                 onClick={() => navigate(feature.path)}
               >

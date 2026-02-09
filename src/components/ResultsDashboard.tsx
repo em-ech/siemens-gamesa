@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wind, Clock, AlertTriangle, TrendingDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -14,8 +15,10 @@ interface ResultsDashboardProps {
   turbines: Turbine[];
 }
 
+type BadgeVariant = "destructive" | "warning" | "secondary" | "outline";
+
 export const ResultsDashboard = ({ turbines }: ResultsDashboardProps) => {
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: string): BadgeVariant => {
     switch (status) {
       case "Critical": return "destructive";
       case "Warning": return "warning";
@@ -30,9 +33,11 @@ export const ResultsDashboard = ({ turbines }: ResultsDashboardProps) => {
     return "text-success";
   };
 
-  const avgDaysToFailure = turbines.reduce((sum, t) => sum + t.predictedDaysToFailure, 0) / turbines.length;
-  const avgRiskScore = turbines.reduce((sum, t) => sum + t.riskScore, 0) / turbines.length;
-  const criticalTurbines = turbines.filter(t => t.currentStatus === "Critical" || t.currentStatus === "Warning").length;
+  const { avgDaysToFailure, avgRiskScore, criticalTurbines } = useMemo(() => ({
+    avgDaysToFailure: turbines.reduce((sum, t) => sum + t.predictedDaysToFailure, 0) / turbines.length,
+    avgRiskScore: turbines.reduce((sum, t) => sum + t.riskScore, 0) / turbines.length,
+    criticalTurbines: turbines.filter(t => t.currentStatus === "Critical" || t.currentStatus === "Warning").length,
+  }), [turbines]);
 
   return (
     <div className="space-y-6 animate-slide-up">
@@ -105,7 +110,7 @@ export const ResultsDashboard = ({ turbines }: ResultsDashboardProps) => {
                       </div>
                     </td>
                     <td className="py-3 px-4">
-                      <Badge variant={getStatusColor(turbine.currentStatus) as any}>
+                      <Badge variant={getStatusColor(turbine.currentStatus)}>
                         {turbine.currentStatus}
                       </Badge>
                     </td>

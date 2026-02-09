@@ -6,11 +6,12 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Loader2 } from "lucide-react";
+import type { Alert } from "@/components/AlertsList";
 
 interface NotificationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  alert: any;
+  alert: Alert | null;
 }
 
 export const NotificationDialog = ({ open, onOpenChange, alert }: NotificationDialogProps) => {
